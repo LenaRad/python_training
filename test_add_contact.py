@@ -19,6 +19,7 @@ class test_add_contact(unittest.TestCase):
         wd.get("http://localhost/addressbook/")
 
     def login(self, wd, username, password):
+        self.open_home_page(wd)
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -103,6 +104,7 @@ class test_add_contact(unittest.TestCase):
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit contact creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.return_to_home_page(wd)
 
     def return_to_home_page(self, wd):
         wd.find_element_by_link_text("home page").click()
@@ -112,24 +114,20 @@ class test_add_contact(unittest.TestCase):
     
     def test_add_contact(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.create_contact(wd, Contact(firstname='firstname', middlename='middlename', lastname='lastname',
                                         nickname='nickname', title='title', company='company', address='address',
                                         home='home', mobile='mobile', work='work', fax='fax', email='email',
                                         email2='email2', email3='email3', homepage='homepage', byear='byear',
                                         ayear='ayear', address2='address2', phone2='phone2', notes='notes'))
-        self.return_to_home_page(wd)
         self.logout(wd)
 
     def test_add_empty_contact(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.create_contact(wd, Contact(firstname='', middlename='', lastname='', nickname='', title='', company='',
                                         address='', home='', mobile='', work='', fax='', email='', email2='', email3='',
                                         homepage='', byear='', ayear='', address2='', phone2='', notes=''))
-        self.return_to_home_page(wd)
         self.logout(wd)
     
     def tearDown(self):
