@@ -46,6 +46,7 @@ class ContactHelper:
         # submit contact creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.app.open_home_page()
+        self.contact_cache = None
 
     def delete_first(self):
         wd = self.app.wd
@@ -56,6 +57,7 @@ class ContactHelper:
         # accept alert
         wd.switch_to_alert().accept()
         self.app.open_home_page()
+        self.contact_cache = None
 
     def edit_first(self, contact):
         wd = self.app.wd
@@ -67,19 +69,22 @@ class ContactHelper:
         # update edition
         wd.find_element_by_name("update").click()
         self.app.open_home_page()
+        self.contact_cache = None
 
     def count(self):
         wd = self.app.wd
         self.app.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.app.open_home_page()
-        contacts = []
-        for element in wd.find_elements_by_name('entry'):
-            text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute('value')
-            contacts.append(Contact(firstname=text, id=id))
-        print(contacts)
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.app.open_home_page()
+            self.contact_cache = []
+            for element in wd.find_elements_by_name('entry'):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute('value')
+                self.contact_cache.append(Contact(firstname=text, id=id))
+        return list(self.contact_cache)
