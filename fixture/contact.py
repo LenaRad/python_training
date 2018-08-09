@@ -70,12 +70,15 @@ class ContactHelper:
     def edit_first(self):
         self.edit_by_index(0)
 
+    def select_form_edit_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_xpath("//table[@id='maintable']/tbody/tr/td[8]/a/img")[index].click()
+
     def edit_by_index(self, index, contact):
         wd = self.app.wd
         self.app.open_home_page()
-        self.select_contact_by_index(index)
         # click edit
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        self.select_form_edit_by_index(index)
         self.fill_contact_form(contact)
         # update edition
         wd.find_element_by_name("update").click()
