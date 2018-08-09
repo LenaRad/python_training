@@ -14,6 +14,8 @@ def test_edit_random_contact(app):
     new_contact = app.contact.get_contact_list()
     assert len(old_contact)  == app.contact.count()
     old_contact[index] = contact
+    print("old contact :", sorted(old_contact, key=Contact.id_or_max))
+    print("new contact :", sorted(new_contact, key=Contact.id_or_max))
     assert sorted(old_contact, key=Contact.id_or_max) == sorted(new_contact, key=Contact.id_or_max)
 
 

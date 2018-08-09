@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
+from random import randrange
 
 
-def test_phones_on_home_page(app):
-    contact_from_home_page = app.contact.get_contact_list()[0]
+def test_random_phones_on_home_page(app):
+    old_contact = app.contact.get_contact_list()
+    index = randrange(len(old_contact))
+    contact_from_home_page = app.contact.get_contact_list()[index]
     contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
-    assert contact_from_home_page.all_home_from_pages == merge_phones_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.all_phones_from_pages == merge_phones_like_on_home_page(contact_from_edit_page)
 
 
 def test_phones_on_contact_view_page(app):
@@ -15,7 +18,6 @@ def test_phones_on_contact_view_page(app):
     assert contact_from_view_page.mobile == contact_from_edit_page.mobile
     assert contact_from_view_page.work == contact_from_edit_page.work
     assert contact_from_view_page.phone2 == contact_from_edit_page.phone2
-
 
 
 def clear(s):
