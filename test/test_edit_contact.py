@@ -8,7 +8,7 @@ def test_edit_random_contact(app):
         app.contact.create(Contact(firstname='firstname'))
     old_contact = app.contact.get_contact_list()
     index = randrange(len(old_contact))
-    contact = Contact(firstname='new firstname')
+    contact = Contact(firstname="new name", lastname="new lastname")
     contact.id = old_contact[index].id
     app.contact.edit_by_index(index, contact)
     new_contact = app.contact.get_contact_list()
