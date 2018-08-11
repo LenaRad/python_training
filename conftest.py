@@ -10,6 +10,7 @@ from fixture.db import DbFixture
 fixture = None
 target = None
 
+
 def load_config(file):
     global target
     if target is None:
@@ -48,9 +49,16 @@ def stop(request):
         fixture.destroy()
     request.addfinalizer(fin)  # logout and browser closes
 
+
+@pytest.fixture
+def check_ui(request):
+    return request.config.getoption('--check_ui')
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="firefox")
     parser.addoption("--target", action="store", default="target.json")
+    parser.addoption("--check_ui", action="store_true")
 
 
 def pytest_generate_tests(metafunc):
@@ -65,6 +73,7 @@ def pytest_generate_tests(metafunc):
 
 def load_from_module(module):
     return importlib.import_module("data.%s" % module).testdata
+
 
 def load_from_json(file):
      with open (os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/%s.json" % file)) as f:
