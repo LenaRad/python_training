@@ -67,6 +67,21 @@ class ContactHelper:
         self.app.open_home_page()
         self.contact_cache = None
 
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
+    def delete_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(id)
+        # submit deletion
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        # accept alert
+        wd.switch_to_alert().accept()
+        self.app.open_home_page()
+        self.contact_cache = None
+
     def edit_first(self):
         self.edit_by_index(0)
 
@@ -84,6 +99,22 @@ class ContactHelper:
         wd.find_element_by_name("update").click()
         self.app.open_home_page()
         self.contact_cache = None
+
+    def edit_by_id(self, id, contact):
+        wd = self.app.wd
+        self.app.open_home_page()
+        # click edit
+        self.click_contact_edit_by_id(id)
+        self.fill_contact_form(contact)
+        # update edition
+        wd.find_element_by_name("update").click()
+        self.app.open_home_page()
+        self.contact_cache = None
+
+    def click_contact_edit_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        wd.find_element_by_css_selector("a[href='edit.php?id=%s']" % id).click()
 
     def count(self):
         wd = self.app.wd
@@ -140,7 +171,6 @@ class ContactHelper:
         email3 = wd.find_element_by_name('email3').get_attribute('value')
         return Contact(firstname=firstname, lastname=lastname, home=home, mobile=mobile, work=work, phone2=phone2,
                        id=id, address=address, email=email, email2=email2, email3=email3)
-
 
     def get_contact_from_view_page(self, index):
         wd = self.app.wd
